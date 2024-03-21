@@ -20,6 +20,7 @@ class StudentDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_student_detail, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,10 +37,10 @@ class StudentDetailFragment : Fragment() {
             val txtbod = view?.findViewById<TextView>(R.id.txtBod)
             val txtPhone = view?.findViewById<TextView>(R.id.txtPhone)
 
-            txtID?.setText(studentLD.id)
-            txtName?.setText(studentLD.name)
-            txtbod?.setText(studentLD.dob)
-            txtPhone?.setText(studentLD.phone)
+            txtID?.text = viewModel.studentLD.value?.id
+            txtName?.text = viewModel.studentLD.value?.name
+            txtbod?.text = viewModel.studentLD.value?.dob
+            txtPhone?.text = viewModel.studentLD.value?.phone
         })
     }
 }

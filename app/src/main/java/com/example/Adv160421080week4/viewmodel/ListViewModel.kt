@@ -21,7 +21,11 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
 
         val student3 =
             Student("11204","Dinny","1994/10/07","6827808747","http://dummyimage.com/75x100.jpg/5fa2dd/ffffff1")
-        val studentList:ArrayList<Student> = arrayListOf<Student>(student1, student2, student3)
+
+        val student4 =
+            Student("16042","Ansa","2002/10/07","08432344","http://dummyimage.com/75x100.jpg/5fa2dd/ffffff1")
+
+        val studentList:ArrayList<Student> = arrayListOf<Student>(student1, student2, student3,student4)
 
         studentsLD.value = studentList
         studentLoadErrorLD.value = false

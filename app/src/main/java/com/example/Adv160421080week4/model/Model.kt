@@ -7,5 +7,5 @@ data class Student(
     val name:String?,
     val dob:String?,
     val phone:String?,
-    val photoUrl:String?
+    val photoUrl:String?,
 )
