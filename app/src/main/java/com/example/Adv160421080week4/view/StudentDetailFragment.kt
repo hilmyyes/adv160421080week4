@@ -10,10 +10,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.Adv160421080week4.R
 import com.example.Adv160421080week4.viewmodel.DetailViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
+import android.util.Log
+import com.example.Adv160421080week4.databinding.FragmentStudentDetailBinding
+
 
 class StudentDetailFragment : Fragment() {
     private lateinit var viewModel: DetailViewModel
-
+    private lateinit var binding: FragmentStudentDetailBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,17 +53,17 @@ class StudentDetailFragment : Fragment() {
 
             //Error di notification.
 
-//            btnUpdate.setOnClickListener {
-//                Observable.timer(5, TimeUnit.SECONDS)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe {
-//                        Log.d("Messages", "five seconds")
-//                        MainActivity.showNotification(student.name.toString(),
-//                            "A new notification created",
-//                            R.drawable.baseline_person_add_24)
-//                    }
-//            }
+            binding.btnUpdate?.setOnClickListener {
+                Observable.timer(5, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        Log.d("Messages", "five seconds")
+                        MainActivity.showNotification(student.name.toString(),
+                            "A new notification created",
+                            R.drawable.baseline_person_add_24)
+                    }
+            }
         })
     }
 }
