@@ -37,33 +37,33 @@ class StudentDetailFragment : Fragment() {
         observeViewModel()
     }
 
-    private fun observeViewModel(){
-        viewModel.studentLD.observe(viewLifecycleOwner, Observer {
-            val txtID = view?.findViewById<TextView>(R.id.txtID)
-            val txtName = view?.findViewById<TextView>(R.id.txtName)
-            val txtbod = view?.findViewById<TextView>(R.id.txtBod)
-            val txtPhone = view?.findViewById<TextView>(R.id.txtPhone)
+    fun observeViewModel(){
+        viewModel.studentLD.observe(viewLifecycleOwner, Observer { student ->
 
-            txtID?.text = viewModel.studentLD.value?.id
-            txtName?.text = viewModel.studentLD.value?.name
-            txtbod?.text = viewModel.studentLD.value?.dob
-            txtPhone?.text = viewModel.studentLD.value?.phone
-
-            var student = it
-
-            //Error di notification.
-
-            binding.btnUpdate?.setOnClickListener {
-                Observable.timer(5, TimeUnit.SECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        Log.d("Messages", "five seconds")
-                        MainActivity.showNotification(student.name.toString(),
-                            "A new notification created",
-                            R.drawable.baseline_person_add_24)
-                    }
-            }
+            binding.txtID.setText(student.id)
+            binding.txtName.setText(student.name)
+            binding.txtBod.setText(student.dob)
+            binding.txtPhone.setText(student.phone)
         })
+
+//        viewModel.studentLD.observe(viewLifecycleOwner, Observer {
+//            var student = it
+//
+//            binding.btnUpdate?.setOnClickListener {
+//                Observable.timer(5, TimeUnit.SECONDS)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe {
+//                        Log.d("Messages", "five seconds")
+//                        MainActivity.showNotification(student.name.toString(),
+//                            "A new notification created",
+//                            R.drawable.baseline_person_add_24)
+//                    }
+//            }
+//        })
+
+        //Error di notification.
+
+
     }
 }

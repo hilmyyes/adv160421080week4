@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
 
             if (ActivityCompat.checkSelfPermission(instance!!.applicationContext,
                 Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(
+                    instance!!,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1
+                )
                 return
             }
             notificationManager.notify(1001,notificationBuilder.build())
