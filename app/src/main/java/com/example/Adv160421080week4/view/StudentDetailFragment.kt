@@ -31,7 +31,7 @@ class StudentDetailFragment : Fragment() {
     }
 
     private fun observeViewModel(){
-        viewModel.studentLD.observe(viewLifecycleOwner, Observer { studentLD->
+        viewModel.studentLD.observe(viewLifecycleOwner, Observer {
             val txtID = view?.findViewById<TextView>(R.id.txtID)
             val txtName = view?.findViewById<TextView>(R.id.txtName)
             val txtbod = view?.findViewById<TextView>(R.id.txtBod)
@@ -41,6 +41,22 @@ class StudentDetailFragment : Fragment() {
             txtName?.text = viewModel.studentLD.value?.name
             txtbod?.text = viewModel.studentLD.value?.dob
             txtPhone?.text = viewModel.studentLD.value?.phone
+
+            var student = it
+
+            //Error di notification.
+
+//            btnUpdate.setOnClickListener {
+//                Observable.timer(5, TimeUnit.SECONDS)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe {
+//                        Log.d("Messages", "five seconds")
+//                        MainActivity.showNotification(student.name.toString(),
+//                            "A new notification created",
+//                            R.drawable.baseline_person_add_24)
+//                    }
+//            }
         })
     }
 }
