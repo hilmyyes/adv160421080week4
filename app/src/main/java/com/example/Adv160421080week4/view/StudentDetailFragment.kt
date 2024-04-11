@@ -37,13 +37,18 @@ class StudentDetailFragment : Fragment() {
         observeViewModel()
     }
 
-    fun observeViewModel(){
-        viewModel.studentLD.observe(viewLifecycleOwner, Observer { student ->
 
-            binding.txtID.setText(student.id)
-            binding.txtName.setText(student.name)
-            binding.txtBod.setText(student.dob)
-            binding.txtPhone.setText(student.phone)
+    fun observeViewModel(){
+        viewModel.studentLD.observe(viewLifecycleOwner, Observer { studentLD->
+            val txtID = view?.findViewById<TextView>(R.id.txtID)
+            val txtName = view?.findViewById<TextView>(R.id.txtName)
+            val txtbod = view?.findViewById<TextView>(R.id.txtBod)
+            val txtPhone = view?.findViewById<TextView>(R.id.txtPhone)
+
+            txtID?.text = viewModel.studentLD.value?.id
+            txtName?.text = viewModel.studentLD.value?.name
+            txtbod?.text = viewModel.studentLD.value?.dob
+            txtPhone?.text = viewModel.studentLD.value?.phone
         })
 
 //        viewModel.studentLD.observe(viewLifecycleOwner, Observer {
@@ -62,7 +67,7 @@ class StudentDetailFragment : Fragment() {
 //            }
 //        })
 
-        //Error di notification.
+        // error di atas, jika di implementasi notifikasinya (waktu pencet detail langsung force close dengan log tidak jelas.
 
 
     }
