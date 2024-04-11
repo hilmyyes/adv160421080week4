@@ -1,74 +1,71 @@
-package com.example.Adv160421080week4.view
+package com.example.adv160421080week4.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.Adv160421080week4.R
-import com.example.Adv160421080week4.viewmodel.DetailViewModel
+import com.example.adv160421080week4.R
+import com.example.adv160421080week4.databinding.FragmentStudentDetailBinding
+import com.example.adv160421080week4.viewModel.DetailViewModel
+import com.squareup.picasso.Picasso
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import android.util.Log
-import com.example.Adv160421080week4.databinding.FragmentStudentDetailBinding
-
 
 class StudentDetailFragment : Fragment() {
-    private lateinit var viewModel: DetailViewModel
-    private lateinit var binding: FragmentStudentDetailBinding
+    private lateinit var detailViewModel: DetailViewModel
+    private lateinit var binding:FragmentStudentDetailBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_student_detail, container, false)
-
+        binding = FragmentStudentDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel =ViewModelProvider(this).get(DetailViewModel::class.java)
-        viewModel.fetch()
+        super.onViewCreated(view, savedInstanceState)
 
-        observeViewModel()
+        if(arguments != null)
+        {
+            detailViewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+            detailViewModel.fetch(StudentDetailFragmentArgs.fromBundle(requireArguments()).studentId)
+            observeViewModel()
+        }
     }
-
 
     fun observeViewModel(){
-        viewModel.studentLD.observe(viewLifecycleOwner, Observer { studentLD->
-            val txtID = view?.findViewById<TextView>(R.id.txtID)
-            val txtName = view?.findViewById<TextView>(R.id.txtName)
-            val txtbod = view?.findViewById<TextView>(R.id.txtBod)
-            val txtPhone = view?.findViewById<TextView>(R.id.txtPhone)
+        detailViewModel.studentLD.observe(viewLifecycleOwner, Observer {
+            var student = it
 
-            txtID?.text = viewModel.studentLD.value?.id
-            txtName?.text = viewModel.studentLD.value?.name
-            txtbod?.text = viewModel.studentLD.value?.dob
-            txtPhone?.text = viewModel.studentLD.value?.phone
+            binding.btnUpdate.setOnClickListener {
+                Observable.timer(5, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe{
+                        Log.d("Message", "five seconds")
+                        MainActivity.showNotification(student.name.toString(),
+                            "A new notification created", R.drawable.baseline_person_2_24)
+                    }
+            }
+
+            if(it!=null){
+                binding.txtID.setText(it.id)
+                binding.txtName.setText(it.name)
+                binding.txtBod.setText(it.dob)
+                binding.txtPhone.setText(it.phone)
+                val picasso = Picasso.Builder(binding.root.context)
+                picasso.listener { picasso, uri, exception ->  exception.printStackTrace()}
+                picasso.build().load(it.photoUrl).into(binding.imageStudent)
+            }
         })
-
-//        viewModel.studentLD.observe(viewLifecycleOwner, Observer {
-//            var student = it
-//
-//            binding.btnUpdate?.setOnClickListener {
-//                Observable.timer(5, TimeUnit.SECONDS)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe {
-//                        Log.d("Messages", "five seconds")
-//                        MainActivity.showNotification(student.name.toString(),
-//                            "A new notification created",
-//                            R.drawable.baseline_person_add_24)
-//                    }
-//            }
-//        })
-
-        // error di atas, jika di implementasi notifikasinya (waktu pencet detail langsung force close dengan log tidak jelas.
-
-
     }
+
 }

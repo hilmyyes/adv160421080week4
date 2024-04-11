@@ -1,77 +1,62 @@
-package com.example.Adv160421080week4.view
+package com.example.adv160421080week4.view
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.example.Adv160421080week4.R
-import com.example.Adv160421080week4.databinding.StudentListItemBinding
-import com.example.Adv160421080week4.model.Student
-import com.squareup.picasso.Picasso
+import com.example.adv160421080week4.databinding.StudentListItemBinding
+import com.example.adv160421080week4.model.Student
 import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import java.lang.Exception
 
+class StudentListAdapter(val studentList: ArrayList<Student>)
+    :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
 
-class StudentListAdapter(val studenList:ArrayList<Student>) :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>()
-{
-    class StudentViewHolder(var view: View) : RecyclerView.ViewHolder(view)
-    private lateinit var binding: StudentListItemBinding
-
-
+    class StudentViewHolder(var binding: StudentListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.student_list_item, parent, false)
-        return StudentViewHolder(view)
+        val binding = StudentListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return StudentViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return studenList.size
-
+        return studentList.size
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        var txtID = holder.view.findViewById<TextView>(R.id.txtID)
-        var txtName = holder.view.findViewById<TextView>(R.id.txtName)
-        var btnDetail = holder.view.findViewById<Button>(R.id.btnDetail)
+        holder.binding.txtId.text = studentList[position].id
+        holder.binding.txtName.text = studentList[position].name
 
-        txtID.text = studenList[position].id
-        txtName.text = studenList[position].name
-        btnDetail.setOnClickListener {
-            val action = StudentListFragmentDirections.actionStudentDetail()
+        holder.binding.btnDetail.setOnClickListener {
+            val action = StudentListFragmentDirections.actionDetailFragment(studentList[position].id.toString())
             Navigation.findNavController(it).navigate(action)
         }
 
         val picasso = Picasso.Builder(holder.itemView.context)
-        picasso.listener { picasso, uri, exception ->
-            exception.printStackTrace()
+        picasso.listener {
+                picasso, uri, exception -> exception.printStackTrace()
         }
-        picasso.build().load(studenList[position].photoUrl).into(binding.imageView)
-        picasso.build().load(studenList[position].photoUrl)
-            .into(binding.imageView, object:Callback {
-                override fun onSuccess() {
-                    binding.progressImage.visibility = View.INVISIBLE
-                    binding.progressImage.visibility = View.VISIBLE
-                }
+        picasso.build().load(
+            studentList[position].photoUrl).into(holder.binding.imgStudent, object :Callback{
 
-                override fun onError(e: Exception?) {
-                    Log.e("picasso_error", e.toString())
-                }
+            override fun onSuccess() {
+                holder.binding.progressImage.visibility = View.INVISIBLE
+                holder.binding.imgStudent.visibility = View.VISIBLE
+            }
 
-            })
-
-
+            override fun onError(e: Exception?) {
+                Log.d("Cek", "Error")
+            }
+        })
     }
 
-    fun updateStudentList(newStudentList: ArrayList<Student>) {
-        studenList.clear()
-        studenList.addAll(newStudentList)
+
+    fun updateStudentList(newStudentList: ArrayList<Student>){
+        studentList.clear()
+        studentList.addAll(newStudentList)
         notifyDataSetChanged()
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.example.Adv160421080week4
+package com.example.adv160421080week4
 
 import org.junit.Test
 
