@@ -4,8 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.adv160421080week4.view.ButtonDetailClickListener
+import com.example.adv160421080week4.R
 import com.example.adv160421080week4.databinding.StudentListItemBinding
 import com.example.adv160421080week4.model.Student
 import com.squareup.picasso.Callback
@@ -14,13 +19,18 @@ import java.lang.Exception
 import java.util.ArrayList
 
 class StudentListAdapter(val studentList: ArrayList<Student>)
-    :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
+    :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>(),
+    ButtonDetailClickListener
+{
 
-    class StudentViewHolder(var binding: StudentListItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class StudentViewHolder(var view: StudentListItemBinding) : RecyclerView.ViewHolder(view.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
-        val binding = StudentListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return StudentViewHolder(binding)
+        val inflater = LayoutInflater.from(parent.context)
+        val view = DataBindingUtil.inflate<StudentListItemBinding>(inflater, R.layout.student_list_item, parent, false)
+        return StudentViewHolder(view)
+//        val binding = StudentListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//        return StudentViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -28,32 +38,44 @@ class StudentListAdapter(val studentList: ArrayList<Student>)
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        holder.binding.txtId.text = studentList[position].id
-        holder.binding.txtName.text = studentList[position].name
 
-        holder.binding.btnDetail.setOnClickListener {
-            val action = StudentListFragmentDirections.actionDetailFragment(studentList[position].id.toString())
-            Navigation.findNavController(it).navigate(action)
-        }
+        holder.view.student = studentList[position]
+        holder.view.listener = this
 
-        val picasso = Picasso.Builder(holder.itemView.context)
-        picasso.listener {
-                picasso, uri, exception -> exception.printStackTrace()
-        }
-        picasso.build().load(
-            studentList[position].photoUrl).into(holder.binding.imgStudent, object :Callback{
 
-            override fun onSuccess() {
-                holder.binding.progressImage.visibility = View.INVISIBLE
-                holder.binding.imgStudent.visibility = View.VISIBLE
-            }
 
-            override fun onError(e: Exception?) {
-                Log.d("Cek", "Error")
-            }
-        })
+//
+//        holder.binding.txtId.text = studentList[position].id
+//        holder.binding.txtName.text = studentList[position].name
+//
+//        holder.binding.btnDetail.setOnClickListener {
+//            val action = StudentListFragmentDirections.actionDetailFragment(studentList[position].id.toString())
+//            Navigation.findNavController(it).navigate(action)
+//        }
+//
+//        val picasso = Picasso.Builder(holder.itemView.context)
+//        picasso.listener {
+//                picasso, uri, exception -> exception.printStackTrace()
+//        }
+//        picasso.build().load(
+//            studentList[position].photoUrl).into(holder.binding.imgStudent, object :Callback{
+//
+//            override fun onSuccess() {
+//                holder.binding.progressImage.visibility = View.INVISIBLE
+//                holder.binding.imgStudent.visibility = View.VISIBLE
+//            }
+//
+//            override fun onError(e: Exception?) {
+//                Log.d("Cek", "Error")
+//            }
+//        })
     }
 
+
+    override fun onButtonDetailClick(v: View) {
+        val action = StudentListFragmentDirections.actionDetailFragment(v.tag.toString())
+        Navigation.findNavController(v).navigate(action)
+    }
 
     fun updateStudentList(newStudentList: ArrayList<Student>){
         studentList.clear()
