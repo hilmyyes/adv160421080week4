@@ -11,6 +11,7 @@ import com.example.adv160421080week4.model.Student
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
+import java.util.ArrayList
 
 class StudentListAdapter(val studentList: ArrayList<Student>)
     :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
