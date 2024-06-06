@@ -5,3 +5,7 @@ import android.view.View
 interface ButtonDetailClickListener{
     fun onButtonDetailClick(v: View)
 }
+
+interface StudentDetailClickListener{
+    fun onStudentDetailClick(v:View)
+}
